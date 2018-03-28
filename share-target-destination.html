@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <style>
+  </style>
+</head>
+<body>
+  <form>
+    <table>
+      <tr>
+        <td><label for="shared_title">Title:</label></td>
+        <td><input id="shared_title" name="shared_title" readonly></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_text">Text:</label></td>
+        <td><input id="shared_text" name="shared_text" readonly></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_url">URL:</label></td>
+        <td><input id="shared_url" name="shared_url" readonly></input></td>
+      </tr>
+    </table>
+  </form>
+
+  <script>
+    'use strict';
+    (() => {
+      const url = new URL(location.href);
+      document.getElementById('shared_title').value = url.searchParams.get('title') || '';
+      document.getElementById('shared_text').value = url.searchParams.get('text') || '';
+      document.getElementById('shared_url').value = url.searchParams.get('url') || '';
+    })();
+  </script>
+</body>
+</html>

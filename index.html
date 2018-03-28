@@ -3,9 +3,10 @@
   <meta charset="utf-8">
   <title>Web Share Target demo</title>
   <link rel="manifest" href="/manifest.webmanifest">
+  <script src="/share-target-polyfill.js"></script>
   <style>
     body {
-      height: 100vh;
+      height: 98vh;
     }
     iframe {
       width: 100%;
@@ -15,6 +16,6 @@
 </head>
 <body>
   <iframe id="share" src="/share.html"></iframe>
-  <iframe id="target" src="/share-target.html"></iframe>
+  <iframe id="target" src=""></iframe>
 </body>
 </html>

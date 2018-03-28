@@ -1,0 +1,6 @@
+{
+  "name": "WebShareTargetDemo",
+  "share_target": {
+    "url_template": "share-target-destination.html?title={title}&text={text}&url={url}"
+  }
+}
