@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script src="/share-polyfill.js"></script>
+  <style>
+    #error { color: red; }
+  </style>
+</head>
+<body>
+  <form meth="POST" action="/share/">
+    <table>
+      <tr>
+        <td><label for="shared_title">Title:</label></td>
+        <td><input id="shared_title" name="shared_title" value="Example Title"></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_text">Text:</label></td>
+        <td><input id="shared_text" name="shared_text" value="Example text"></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_url">URL:</label></td>
+        <td><input id="shared_url" name="shared_url" value="https://example.com/a?b=c"></input></td>
+      </tr>
+    </table>
+    <input type="submit" value="Share"></input>
+  </form>
+  <div id="error"></div>
+  <script>
+    'use strict';
+    window.onload = () => {
+      const error = document.getElementById('error');
+
+      document.querySelector('form').onsubmit = () => {
+        const title = document.getElementById('shared_title').value;
+        const text = document.getElementById('shared_text').value;
+        const url = document.getElementById('shared_url').value;
+
+        let data = {};
+        if (title !== '') {
+          data.title = title;
+        }
+        if (text !== '') {
+          data.text = text;
+        }
+        if (url !== '') {
+          data.url = url;
+        }
+
+        error.textContent = '';
+        navigator.share(data)
+        .then(() => {
+          console.log('Successful share');
+        })
+        .catch((err) => {
+          console.log('Unsuccessful share');
+          error.textContent = 'Share failed: ' + err.message;
+        });
+
+        return false;
+      };
+    };
+  </script>
+</body>
+</html>
