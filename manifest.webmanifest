@@ -1,6 +1,14 @@
 {
   "name": "WebShareTargetDemo",
   "share_target": {
-    "url_template": "share-target-destination.html?title={title}&text={text}&url={url}"
+    "url_template": "share-target-destination.html?received_title={title}&received_text={text}&received_url={url}",
+
+    "action": "share-target-destination.html",
+    "method": "GET",
+    "params": {
+      "title": "received_title",
+      "text": "received_text",
+      "url": "received_url"
+    }
   }
 }
