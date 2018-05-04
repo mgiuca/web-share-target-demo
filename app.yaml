@@ -26,8 +26,7 @@ handlers:
   upload: share-polyfill.js
 
 - url: /share-target-destination.html
-  static_files: share-target-destination.html
-  upload: share-target-destination.html
+  script: share-target-destination.app
 
 - url: /share-target-polyfill.js
   static_files: share-target-polyfill.js

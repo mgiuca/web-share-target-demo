@@ -17,7 +17,7 @@
         if (method === 'POST') {
           const form = document.createElement('form');
           form.action = action;
-          form.method = 'GET';
+          form.method = 'POST';
           for (let key of ['title', 'text', 'url']) {
             if (params[key] && event.data[key]) {
               const input = document.createElement('input');
