@@ -17,5 +17,13 @@
 <body>
   <iframe id="share" src="/share.html"></iframe>
   <iframe id="target" src=""></iframe>
+  <script>
+    'use strict';
+    navigator.serviceWorker.register("/sw.js").then(registration => {
+      console.log("Service worker installed.");
+    }, err => {
+      console.error("Installing the service worker failed!", err);
+    });
+  </script>
 </body>
 </html>
