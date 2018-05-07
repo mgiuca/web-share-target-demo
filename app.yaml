@@ -28,6 +28,10 @@ handlers:
 - url: /share-target-destination.html
   script: share-target-destination.app
 
+- url: /share-target-destination.client.html
+  static_files: share-target-destination.client.html
+  upload: share-target-destination.client.html
+
 - url: /share-target-polyfill.js
   static_files: share-target-polyfill.js
   upload: share-target-polyfill.js
