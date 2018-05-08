@@ -7,8 +7,11 @@ from webapp2 import RequestHandler, WSGIApplication
 
 JINJA_ENVIRONMENT = Environment(
     loader=FileSystemLoader(path.dirname(__file__)),
-    extensions=['jinja2.ext.autoescape'],
-    autoescape=True)
+    extensions=['jinja2.ext.autoescape'])
+
+
+def escape(text):
+  return text.replace('\\', '\\\\').replace('\'', '\\\'')
 
 
 class MainPage(RequestHandler):
@@ -16,9 +19,10 @@ class MainPage(RequestHandler):
         main_template = JINJA_ENVIRONMENT.get_template('share-target-destination.template.html')
 
         main_template_values = {
-          'received_title': self.request.get('received_title', ''),
-          'received_text': self.request.get('received_text', ''),
-          'received_url': self.request.get('received_url', '')
+          'generation_location': 'server-side',
+          'received_title': escape(self.request.get('received_title', '')),
+          'received_text': escape(self.request.get('received_text', '')),
+          'received_url': escape(self.request.get('received_url', ''))
         }
         self.response.write(main_template.render(main_template_values))
 

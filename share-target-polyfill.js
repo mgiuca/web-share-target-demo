@@ -3,10 +3,10 @@
 (() => {
   function receiveMessage(event) {
     const manifestURL = document.querySelector('link[rel=manifest]').href;
-    console.log('Fetching manifest ' + manifestURL);
+    // console.log('Fetching manifest ' + manifestURL);
     fetch(manifestURL)
     .then((response) => {
-      console.log('Fetched manifest ' + manifestURL);
+      // console.log('Fetched manifest ' + manifestURL);
       return response.json();
     })
     .then((myJson) => {
