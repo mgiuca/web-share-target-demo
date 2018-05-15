@@ -27,7 +27,7 @@ class MainPage(RequestHandler):
 
         form = FieldStorage()
         print("Looking up")
-        fileitem = form["received_files"]
+        fileitem = form["received_file"]
         print("Looked up")
 
         if fileitem.file:

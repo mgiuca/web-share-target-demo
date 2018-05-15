@@ -28,18 +28,6 @@
               form.appendChild(input);
             }
           }
-          if (params['file']) {
-            console.log("Have params['file']");
-          } else {
-            console.log("Do not have params['file']");
-          }
-          if (event.data['file']) {
-            console.log("Have event.data['file']");
-          } else {
-            // This occurs.
-            console.log("Do not have event.data['file']");
-          }
-
           if (params['file'] && params['file'].length > 0 && params['file'][0]['name'] && event.data['file']) {
             console.log('params[\'file\'] = "' + params['file'] + '"');
             const input = document.createElement('input');
@@ -47,6 +35,8 @@
             input.id = params['file'][0]['name'];
             input.name = input.id;
             input.files = event.data['file'];
+            console.log('Field name: ' + input.id);
+            console.log('We are sharing ' + input.files.length + ' files.');
             form.appendChild(input);
           }
 
