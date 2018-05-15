@@ -28,6 +28,28 @@
               form.appendChild(input);
             }
           }
+          if (params['file']) {
+            console.log("Have params['file']");
+          } else {
+            console.log("Do not have params['file']");
+          }
+          if (event.data['file']) {
+            console.log("Have event.data['file']");
+          } else {
+            // This occurs.
+            console.log("Do not have event.data['file']");
+          }
+
+          if (params['file'] && event.data['file']) {
+            console.log('params[\'file\'] = "' + params['file'] + '"');
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.id = params['file'];
+            input.name = params['file'];
+            input.files = event.data['file'];
+            form.appendChild(input);
+          }
+
           const targetBody = document.getElementById('target').contentWindow.document.body;
           targetBody.appendChild(form);
           form.submit();
