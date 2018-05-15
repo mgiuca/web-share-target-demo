@@ -8,7 +8,13 @@
     "params": {
       "title": "received_title",
       "text": "received_text",
-      "url": "received_url"
+      "url": "received_url",
+      "file": [
+        {
+          "name": "received_file",
+          "accept": "*"
+        }
+      ]
     }
   }
 }
