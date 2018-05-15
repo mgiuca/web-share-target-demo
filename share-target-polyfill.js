@@ -40,12 +40,12 @@
             console.log("Do not have event.data['file']");
           }
 
-          if (params['file'] && event.data['file']) {
+          if (params['file'] && params['file'].length > 0 && params['file'][0]['name'] && event.data['file']) {
             console.log('params[\'file\'] = "' + params['file'] + '"');
             const input = document.createElement('input');
             input.type = 'file';
-            input.id = params['file'];
-            input.name = params['file'];
+            input.id = params['file'][0]['name'];
+            input.name = input.id;
             input.files = event.data['file'];
             form.appendChild(input);
           }
