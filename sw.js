@@ -3,6 +3,7 @@
 self.addEventListener('fetch', function(event) {
   const handleClientSide = false;
 
+  // Ideally, share-target-destination.template.html would be cached in advance.
   function respondToShare(event) {
     event.respondWith(
       fetch('share-target-destination.template.html')

@@ -52,7 +52,10 @@
           data.url = url;
         }
         if (files.length > 0) {
+          console.log('We are sharing ' + files.length + ' files.');
           data.files = files;
+        } else {
+          console.log('No files are being shared.');
         }
 
         error.textContent = '';
