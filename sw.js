@@ -3,6 +3,7 @@
 self.addEventListener('fetch', function(event) {
   const handleClientSide = false;
 
+  // Ideally, share-target-destination.template.html would be cached in advance.
   function respondToShare(event) {
     event.respondWith(
       fetch('share-target-destination.template.html')
@@ -15,6 +16,8 @@ self.addEventListener('fetch', function(event) {
                   const title = formData.get('received_title') || '';
                   const text = formData.get('received_text') || '';
                   const url = formData.get('received_url') || '';
+                  const file = formData.get('received_file'); // File object
+                  console.log('file="' + file + '"');
 
                   const init = {
                       status: 200,
@@ -22,13 +25,28 @@ self.addEventListener('fetch', function(event) {
                       headers: {'Content-Type': 'text/html'}
                   };
 
-                  const body = page
+                  let body = page
                     .replace('{{generation_location}}', 'client-side')
-                    .replace("'{{received_title}}'", JSON.stringify(title))
-                    .replace("'{{received_text}}'", JSON.stringify(text))
-                    .replace("'{{received_url}}'", JSON.stringify(url));
+                    .replace("{{received_title}}", title)
+                    .replace("{{received_text}}", text)
+                    .replace("{{received_url}}", url);
 
-                  return new Response(body, init);
+                  if (!file) {
+                    body = body
+                      .replace("{{received_file}}", '');
+                    return new Response(body, init);
+                  }
+
+                  return new Promise(function(resolve, reject) {
+                    const fileReader = new FileReader();
+                    fileReader.onload = function(fileLoadedEvent){
+                      const textFromFileLoaded = fileLoadedEvent.target.result;
+                      body = body
+                        .replace("{{received_file}}", textFromFileLoaded);
+                      resolve(new Response(body, init));
+                    };
+                    fileReader.readAsText(file, "UTF-8");
+                  });
                 })
             })
         })

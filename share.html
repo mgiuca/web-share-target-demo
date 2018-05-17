@@ -23,8 +23,8 @@
         <td><input id="shared_url" name="shared_url" value="https://example.com/a?b=c"></input></td>
       </tr>
       <tr>
-        <td><label for="shared_files">File(s):</label></td>
-        <td><input id="shared_files" name="shared_files" type="file" multiple></input></td>
+        <td><label for="shared_file">File(s):</label></td>
+        <td><input id="shared_file" name="shared_file" type="file" multiple></input></td>
       </tr>
     </table>
     <input type="submit" value="Share"></input>
@@ -39,7 +39,7 @@
         const title = document.getElementById('shared_title').value;
         const text = document.getElementById('shared_text').value;
         const url = document.getElementById('shared_url').value;
-        const files = document.getElementById('shared_files').files;
+        const files = document.getElementById('shared_file').files;
 
         let data = {};
         if (title !== '') {
@@ -52,7 +52,10 @@
           data.url = url;
         }
         if (files.length > 0) {
-          data.files = files;
+          console.log('We are sharing ' + files.length + ' files.');
+          data.file = files;
+        } else {
+          console.log('No files are being shared.');
         }
 
         error.textContent = '';

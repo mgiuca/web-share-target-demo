@@ -3,6 +3,10 @@
 (() => {
   function receiveMessage(event) {
     const manifestURL = document.querySelector('link[rel=manifest]').href;
+
+    // Using a <form> does not work when we want script to upload files.
+    const useFormElement = false;
+
     // console.log('Fetching manifest ' + manifestURL);
     fetch(manifestURL)
     .then((response) => {
@@ -15,23 +19,66 @@
         const method = (myJson.share_target.method || '').toUpperCase();
         const params = myJson.share_target.params;
         if (method === 'POST') {
-          const form = document.createElement('form');
-          form.action = action;
-          form.method = 'POST';
-          for (let key of ['title', 'text', 'url']) {
-            if (params[key] && event.data[key]) {
+          if (useFormElement) {
+            const form = document.createElement('form');
+            form.action = action;
+            form.method = 'POST';
+            for (let key of ['title', 'text', 'url']) {
+              if (params[key] && event.data[key]) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.id = params[key];
+                input.name = params[key];
+                input.value = event.data[key];
+                form.appendChild(input);
+              }
+            }
+            if (params['file'] && params['file'].length > 0 && params['file'][0]['name'] && event.data['file']) {
+              console.log('params[\'file\'] = "' + params['file'] + '"');
               const input = document.createElement('input');
-              input.type = 'hidden';
-              input.id = params[key];
-              input.name = params[key];
-              input.value = event.data[key];
+              input.type = 'file';
+              input.id = params['file'][0]['name'];
+              input.name = input.id;
+              input.files = event.data['file'];
+              console.log('Field name: ' + input.id);
+              console.log('We are sharing ' + input.files.length + ' files.');
               form.appendChild(input);
             }
+
+            const targetBody = document.getElementById('target').contentWindow.document.body;
+            targetBody.appendChild(form);
+            form.submit();
+            targetBody.removeChild(form);
+          } else {
+            // Use XMLHttpRequest.
+            const formData = new FormData();
+            for (let key of ['title', 'text', 'url']) {
+              if (params[key] && event.data[key]) {
+                formData.append(params[key], event.data[key]);
+                console.log('params[key] ' + params[key] + ', event.data[key] ' + event.data[key]);
+              }
+            }
+
+            if (params['file'] && params['file'].length > 0 && params['file'][0]['name'] && event.data['file']) {
+              const name = params['file'][0]['name'];
+              const value = event.data['file'][0];
+              const filename = value.name;
+              console.log('name ' + name + ', filename ' + filename + ' (' + value.size + ' bytes)');
+              formData.append(name, value, filename);
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", action);
+            // xhr.setRequestHeader("Content-Type","multipart/form-data");
+            xhr.onload = function() {
+              if (xhr.status !== 200) {
+                console.log('XMLHttpRequest failed');
+                return;
+              }
+              document.getElementById('target').contentWindow.document.documentElement.innerHTML = xhr.responseText;
+            };
+            xhr.send(formData);
           }
-          const targetBody = document.getElementById('target').contentWindow.document.body;
-          targetBody.appendChild(form);
-          form.submit();
-          targetBody.removeChild(form);
         } else {
           const pairs = [];
           for (let key of ['title', 'text', 'url']) {

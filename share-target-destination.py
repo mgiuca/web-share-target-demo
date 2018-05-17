@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
+from cgi import FieldStorage
 from jinja2 import Environment, FileSystemLoader
 from os import path
 from webapp2 import RequestHandler, WSGIApplication
-
 
 JINJA_ENVIRONMENT = Environment(
     loader=FileSystemLoader(path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'])
 
 
+# How should we handle " in the text?
 def escape(text):
-  return text.replace('\\', '\\\\').replace('\'', '\\\'')
+  return text
 
 
 class MainPage(RequestHandler):
@@ -24,6 +25,26 @@ class MainPage(RequestHandler):
           'received_text': escape(self.request.get('received_text', '')),
           'received_url': escape(self.request.get('received_url', ''))
         }
+        print(main_template_values)
+
+        if False:
+          form = FieldStorage()
+          print("Looking up")
+          fileitem = form["received_file"]
+          print("Looked up")
+
+          if fileitem.file:
+            print("File received")
+            # It's an uploaded file; count lines
+            linecount = 0
+            while 1:
+                line = fileitem.file.readline()
+                if not line: break
+                linecount = linecount + 1
+            print(linecount)
+          else:
+            print("No file received")
+
         self.response.write(main_template.render(main_template_values))
 
 

@@ -10,27 +10,21 @@
     <table>
       <tr>
         <td><label for="target_title">Title:</label></td>
-        <td><input id="target_title" name="target_title" readonly></input></td>
+        <td><input id="target_title" name="target_title" readonly value="{{received_title}}"></input></td>
       </tr>
       <tr>
         <td><label for="target_text">Text:</label></td>
-        <td><input id="target_text" name="target_text" readonly></input></td>
+        <td><input id="target_text" name="target_text" readonly value="{{received_text}}"></input></td>
       </tr>
       <tr>
         <td><label for="target_url">URL:</label></td>
-        <td><input id="target_url" name="target_url" readonly></input></td>
+        <td><input id="target_url" name="target_url" readonly value="{{received_url}}"></input></td>
+      </tr>
+      <tr>
+        <td><label for="target_file">File:</label></td>
+        <td><input id="target_file" name="target_file" readonly value="{{received_file}}"></input></td>
       </tr>
     </table>
   </form>
-
-  <script>
-    'use strict';
-    (() => {
-      const url = new URL(location.href);
-      document.getElementById('target_title').value = '{{received_title}}';
-      document.getElementById('target_text').value = '{{received_text}}';
-      document.getElementById('target_url').value = '{{received_url}}';
-    })();
-  </script>
 </body>
 </html>
