@@ -69,7 +69,7 @@
 
             const xhr = new XMLHttpRequest();
             xhr.open("POST", action);
-            // xhr.setRequestHeader("Content-Type","multipart/form-data");
+            xhr.setRequestHeader("Content-Type","multipart/form-data");
             xhr.onload = function() {
               if (xhr.status !== 200) {
                 console.log('XMLHttpRequest failed');

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    #error { color: red; }
+  </style>
+</head>
+<body>
+  <form method="POST" action="/share-target-destination.html" enctype="multipart/form-data">
+    <table>
+      <tr>
+        <td><label for="received_title">Title:</label></td>
+        <td><input id="received_title" name="received_title" value="Example Title"></input></td>
+      </tr>
+      <tr>
+        <td><label for="received_text">Text:</label></td>
+        <td><input id="received_text" name="received_text" value="Example text"></input></td>
+      </tr>
+      <tr>
+        <td><label for="received_url">URL:</label></td>
+        <td><input id="received_url" name="received_url" value="https://example.com/a?b=c"></input></td>
+      </tr>
+      <tr>
+        <td><label for="received_file">File(s):</label></td>
+        <td><input id="received_file" name="received_file" type="file" multiple></input></td>
+      </tr>
+    </table>
+    <input type="submit" value="Share"></input>
+  </form>
+  <div id="error"></div>
+</body>
+</html>

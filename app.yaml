@@ -21,6 +21,10 @@ handlers:
   static_files: share.html
   upload: share.html
 
+- url: /share-sim.html
+  static_files: share-sim.html
+  upload: share-sim.html
+
 - url: /share-polyfill.js
   static_files: share-polyfill.js
   upload: share-polyfill.js

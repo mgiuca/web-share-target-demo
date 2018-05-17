@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from cgi import FieldStorage
 from jinja2 import Environment, FileSystemLoader
 from os import path
 from webapp2 import RequestHandler, WSGIApplication
@@ -21,29 +20,21 @@ class MainPage(RequestHandler):
 
         main_template_values = {
           'generation_location': 'server-side',
-          'received_title': escape(self.request.get('received_title', '')),
-          'received_text': escape(self.request.get('received_text', '')),
-          'received_url': escape(self.request.get('received_url', ''))
+          'received_title': escape(self.request.POST.get('received_title', '')),
+          'received_text': escape(self.request.POST.get('received_text', '')),
+          'received_url': escape(self.request.POST.get('received_url', ''))
         }
+        print(self.request.headers)
         print(main_template_values)
 
-        if False:
-          form = FieldStorage()
-          print("Looking up")
-          fileitem = form["received_file"]
-          print("Looked up")
-
-          if fileitem.file:
-            print("File received")
-            # It's an uploaded file; count lines
-            linecount = 0
-            while 1:
-                line = fileitem.file.readline()
-                if not line: break
-                linecount = linecount + 1
-            print(linecount)
-          else:
-            print("No file received")
+        uploaded_file = self.request.POST.get('received_file')
+        if uploaded_file:
+          print('Name of file uploaded: ' + uploaded_file.filename)
+          print('Type of file uploaded: ' + uploaded_file.type)
+          file_contents = uploaded_file.file.read()
+          main_template_values['received_file'] = file_contents
+        else:
+          print('No file uploaded')
 
         self.response.write(main_template.render(main_template_values))
 
