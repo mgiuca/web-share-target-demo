@@ -1,7 +1,7 @@
 'use strict';
 
 self.addEventListener('fetch', function(event) {
-  const handleClientSide = false;
+  const handleClientSide = true;
 
   // Ideally, share-target-destination.template.html would be cached in advance.
   function respondToShare(event) {

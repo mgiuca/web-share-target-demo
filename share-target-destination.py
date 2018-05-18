@@ -19,32 +19,23 @@ class MainPage(RequestHandler):
     def post(self):
         main_template = JINJA_ENVIRONMENT.get_template('share-target-destination.template.html')
 
+
+        received_file = self.request.POST.getall('received_file')
+        attachments = [{'content': f.file.read(),
+                         'filename': f.filename} for f in received_file if f != '']
+
         main_template_values = {
           'generation_location': 'server-side',
-          'received_title': escape(self.request.get('received_title', '')),
-          'received_text': escape(self.request.get('received_text', '')),
-          'received_url': escape(self.request.get('received_url', ''))
+          'received_title': escape(self.request.POST.get('received_title', '')),
+          'received_text': escape(self.request.POST.get('received_text', '')),
+          'received_url': escape(self.request.POST.get('received_url', ''))
         }
+
+        if len(attachments) > 0:
+          file_contents = attachments[0]['content']
+          main_template_values['received_file'] = file_contents
+
         print(main_template_values)
-
-        if False:
-          form = FieldStorage()
-          print("Looking up")
-          fileitem = form["received_file"]
-          print("Looked up")
-
-          if fileitem.file:
-            print("File received")
-            # It's an uploaded file; count lines
-            linecount = 0
-            while 1:
-                line = fileitem.file.readline()
-                if not line: break
-                linecount = linecount + 1
-            print(linecount)
-          else:
-            print("No file received")
-
         self.response.write(main_template.render(main_template_values))
 
 

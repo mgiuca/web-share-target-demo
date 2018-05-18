@@ -1,8 +1,6 @@
 {
   "name": "WebShareTargetDemo",
   "share_target": {
-    "url_template": "share-target-destination.html?received_title={title}&received_text={text}&received_url={url}",
-
     "action": "share-target-destination.html",
     "method": "POST",
     "params": {
