@@ -2,6 +2,9 @@
 <head>
   <meta charset="utf-8">
   <style>
+    input {
+      width: 40em;
+    }
   </style>
 </head>
 <body>
@@ -21,8 +24,12 @@
         <td><input id="target_url" name="target_url" readonly value="{{received_url}}"></input></td>
       </tr>
       <tr>
-        <td><label for="target_file">File:</label></td>
-        <td><input id="target_file" name="target_file" readonly value="{{received_file}}"></input></td>
+        <td><label for="target_html_files">HTML Files:</label></td>
+        <td><input id="target_html_files" name="target_html_files" readonly value="{{received_html_files}}"></input></td>
+      </tr>
+      <tr>
+        <td><label for="target_css_files">CSS Files:</label></td>
+        <td><input id="target_css_files" name="target_css_files" readonly value="{{received_css_files}}"></input></td>
       </tr>
     </table>
   </form>

@@ -9,8 +9,12 @@
       "url": "received_url",
       "files": [
         {
-          "name": "received_file",
-          "accept": "*"
+          "name": "received_html_files",
+          "accept": "text/html"
+        },
+        {
+          "name": "received_css_files",
+          "accept": "text/css"
         }
       ]
     }

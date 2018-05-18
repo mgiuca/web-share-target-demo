@@ -30,10 +30,18 @@
             for (let i = 0; i < params['files'].length; ++i) {
               for (let j = 0; j < event.data['files'].length; ++j) {
                 const name = params['files'][i]['name'];
+                const accept = params['files'][i]['accept'];
                 const value = event.data['files'][j];
                 const filename = value.name;
-                console.log('name ' + name + ', filename ' + filename + ' (' + value.size + ' bytes)');
-                formData.append(name, value, filename);
+                const type = value.type;
+
+                // Glob matching is not yet implemented.
+                // Accepting a list is not yet implemented.
+                // Matching a file against no more than one field is not yet implemented.
+                if (!accept || accept === '*' || accept === type) {
+                  console.log('name ' + name + ', filename ' + filename + ' (' + value.size + ' bytes), type ' + value.type);
+                  formData.append(name, value, filename);
+                }
               }
             }
           }

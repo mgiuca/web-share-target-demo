@@ -16,7 +16,6 @@ self.addEventListener('fetch', function(event) {
                   const title = formData.get('received_title') || '';
                   const text = formData.get('received_text') || '';
                   const url = formData.get('received_url') || '';
-                  const files = formData.getAll('received_file'); // sequence of File objects
 
                   const init = {
                       status: 200,
@@ -30,16 +29,37 @@ self.addEventListener('fetch', function(event) {
                     .replace("{{received_text}}", text)
                     .replace("{{received_url}}", url);
 
+                  const file_fields = [
+                    "received_html_files",
+                    "received_css_files"
+                  ];
+
+                  let field_index = 0;
+
+                  let files = undefined;
                   let file_contents = '';
                   let index = 0;
 
+                  function prepareField() {
+                    files = formData.getAll(file_fields[field_index]); // sequence of File objects
+                    file_contents = '';
+                    index = 0;
+                  }
+
+                  prepareField();
+
                   return new Promise(function(resolve, reject) {
                     function progress() {
-                      if (index === files.length) {
+                      while (index === files.length) {
                         body = body
-                          .replace("{{received_file}}", file_contents);
-                        resolve(new Response(body, init));
-                        return;
+                          .replace('{{' + file_fields[field_index] + '}}', file_contents);
+
+                        ++field_index;
+                        if (field_index === file_fields.length) {
+                          resolve(new Response(body, init));
+                          return;
+                        }
+                        prepareField();
                       }
 
                       const fileReader = new FileReader();

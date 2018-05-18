@@ -20,10 +20,6 @@ class MainPage(RequestHandler):
         main_template = JINJA_ENVIRONMENT.get_template('share-target-destination.template.html')
 
 
-        received_file = self.request.POST.getall('received_file')
-        attachments = [{'content': f.file.read(),
-                         'filename': f.filename} for f in received_file if f != '']
-
         main_template_values = {
           'generation_location': 'server-side',
           'received_title': escape(self.request.POST.get('received_title', '')),
@@ -31,9 +27,17 @@ class MainPage(RequestHandler):
           'received_url': escape(self.request.POST.get('received_url', ''))
         }
 
-        if len(attachments) > 0:
-          file_contents = ", ".join([attachment['content'] for attachment in attachments])
-          main_template_values['received_file'] = file_contents
+        def process_attachments(field):
+          received_file = self.request.POST.getall(field)
+          attachments = [{'content': f.file.read(),
+                           'filename': f.filename} for f in received_file if f != '']
+
+          if len(attachments) > 0:
+            file_contents = ", ".join([attachment['content'] for attachment in attachments])
+            main_template_values[field] = file_contents
+
+        process_attachments('received_html_files')
+        process_attachments('received_css_files')
 
         print(main_template_values)
         self.response.write(main_template.render(main_template_values))
