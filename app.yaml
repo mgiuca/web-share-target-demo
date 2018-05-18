@@ -1,3 +1,4 @@
+service: web-share-target-demo-one
 runtime: python27
 api_version: 1
 threadsafe: true

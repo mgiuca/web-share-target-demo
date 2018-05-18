@@ -69,7 +69,7 @@ self.addEventListener('fetch', function(event) {
                       fileReader.onload = function(fileLoadedEvent) {
                         const textFromFileLoaded = fileLoadedEvent.target.result;
                         if (index > 0) {
-                          file_contents += ',';
+                          file_contents += ', ';
                         }
                         file_contents += textFromFileLoaded;
                         index += 1;
