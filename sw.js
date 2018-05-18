@@ -1,7 +1,10 @@
 'use strict';
 
+(() => {
+
+let handleClientSide = true;
+
 self.addEventListener('fetch', function(event) {
-  const handleClientSide = true;
 
   // Ideally, share-target-destination.template.html would be cached in advance.
   function respondToShare(event) {
@@ -84,9 +87,22 @@ self.addEventListener('fetch', function(event) {
   }
 
   // console.log('Received fetch event: ' + event.request.method + ' ' + event.request.url);
-  if (event.request.method === 'POST' && handleClientSide) {
-    respondToShare(event);
-    return;
+  if (event.request.method === 'POST') {
+    const url = event.request.url;
+    if (url.endsWith('/client')) {
+      handleClientSide = true;
+      event.respondWith(
+        fetch('share-target-destination.template.html'));
+      return;
+    } else if (url.endsWith('/server')) {
+      handleClientSide = false;
+      event.respondWith(
+        fetch('share-target-destination.template.html'));
+      return;
+    } else if (handleClientSide) {
+      respondToShare(event);
+      return;
+    }
   }
   event.respondWith(
     caches.match(event.request)
@@ -100,3 +116,5 @@ self.addEventListener('fetch', function(event) {
     )
   );
 });
+
+})();

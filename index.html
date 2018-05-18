@@ -10,12 +10,40 @@
     }
     iframe {
       width: 100%;
-      height: 50%;
+      height: 40%;
+    }
+    section {
+      width: 100%;
+      height: 20%;
     }
   </style>
 </head>
 <body>
   <iframe id="share" src="/share.html"></iframe>
+  <section>
+    <form>
+      <table>
+        <tr>
+          <td><input type="radio" id="client" name="side" value="client" checked></input></td>
+          <td><label for="client">Handle on client side</label></td>
+        </tr>
+        <tr>
+          <td><input type="radio" id="server" name="side" value="server"></input></td>
+          <td><label for="server">Handle on server side</label></td>
+        </tr>
+      </table>
+    </form>
+    <script>
+      'use strict';
+      function handleSide(event) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", '/' + event.target.value);
+        xhr.send();
+      }
+      client.addEventListener('click', handleSide);
+      server.addEventListener('click', handleSide);
+    </script>
+  </section>
   <iframe id="target" src=""></iframe>
   <script>
     'use strict';
