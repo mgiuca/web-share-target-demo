@@ -21,16 +21,21 @@
           for (let key of ['title', 'text', 'url']) {
             if (params[key] && event.data[key]) {
               formData.append(params[key], event.data[key]);
-              console.log('params[key] ' + params[key] + ', event.data[key] ' + event.data[key]);
+              // console.log('params[key] ' + params[key] + ', event.data[key] ' + event.data[key]);
             }
           }
 
-          if (params['file'] && params['file'].length > 0 && params['file'][0]['name'] && event.data['file']) {
-            const name = params['file'][0]['name'];
-            const value = event.data['file'][0];
-            const filename = value.name;
-            console.log('name ' + name + ', filename ' + filename + ' (' + value.size + ' bytes)');
-            formData.append(name, value, filename);
+          if (params['files'] && event.data['files']) {
+            // TODO: never append the same file more than once.
+            for (let i = 0; i < params['files'].length; ++i) {
+              for (let j = 0; j < event.data['files'].length; ++j) {
+                const name = params['files'][i]['name'];
+                const value = event.data['files'][j];
+                const filename = value.name;
+                console.log('name ' + name + ', filename ' + filename + ' (' + value.size + ' bytes)');
+                formData.append(name, value, filename);
+              }
+            }
           }
 
           const xhr = new XMLHttpRequest();

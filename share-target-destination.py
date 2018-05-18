@@ -32,7 +32,7 @@ class MainPage(RequestHandler):
         }
 
         if len(attachments) > 0:
-          file_contents = attachments[0]['content']
+          file_contents = ", ".join([attachment['content'] for attachment in attachments])
           main_template_values['received_file'] = file_contents
 
         print(main_template_values)

@@ -16,8 +16,7 @@ self.addEventListener('fetch', function(event) {
                   const title = formData.get('received_title') || '';
                   const text = formData.get('received_text') || '';
                   const url = formData.get('received_url') || '';
-                  const file = formData.get('received_file'); // File object
-                  console.log('file="' + file + '"');
+                  const files = formData.getAll('received_file'); // sequence of File objects
 
                   const init = {
                       status: 200,
@@ -31,21 +30,32 @@ self.addEventListener('fetch', function(event) {
                     .replace("{{received_text}}", text)
                     .replace("{{received_url}}", url);
 
-                  if (!file) {
-                    body = body
-                      .replace("{{received_file}}", '');
-                    return new Response(body, init);
-                  }
+                  let file_contents = '';
+                  let index = 0;
 
                   return new Promise(function(resolve, reject) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(fileLoadedEvent){
-                      const textFromFileLoaded = fileLoadedEvent.target.result;
-                      body = body
-                        .replace("{{received_file}}", textFromFileLoaded);
-                      resolve(new Response(body, init));
-                    };
-                    fileReader.readAsText(file, "UTF-8");
+                    function progress() {
+                      if (index === files.length) {
+                        body = body
+                          .replace("{{received_file}}", file_contents);
+                        resolve(new Response(body, init));
+                        return;
+                      }
+
+                      const fileReader = new FileReader();
+                      fileReader.onload = function(fileLoadedEvent) {
+                        const textFromFileLoaded = fileLoadedEvent.target.result;
+                        if (index > 0) {
+                          file_contents += ',';
+                        }
+                        file_contents += textFromFileLoaded;
+                        index += 1;
+                        progress();
+                      };
+                      fileReader.readAsText(files[index], "UTF-8");
+                    }
+
+                    progress();
                   });
                 })
             })

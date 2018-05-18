@@ -7,7 +7,7 @@
       "title": "received_title",
       "text": "received_text",
       "url": "received_url",
-      "file": [
+      "files": [
         {
           "name": "received_file",
           "accept": "*"
