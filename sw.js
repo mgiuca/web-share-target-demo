@@ -4,6 +4,10 @@
 
 let handleClientSide = true;
 
+self.addEventListener('activate', function(event) {
+  event.waitUntil(clients.claim());
+});
+
 self.addEventListener('fetch', function(event) {
 
   // Ideally, share-target-destination.template.html would be cached in advance.
