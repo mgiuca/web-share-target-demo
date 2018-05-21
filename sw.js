@@ -20,9 +20,9 @@ self.addEventListener('fetch', event => {
   // Ideally, share-target-destination.template.html would be cached in advance.
   function respondToShare(event) {
     event.respondWith((async () => {
-      let response = await fetch('share-target-destination.template.html');
-      let page = await response.text();
-      let formData = await event.request.formData();
+      const response = await fetch('share-target-destination.template.html');
+      const page = await response.text();
+      const formData = await event.request.formData();
       const title = formData.get('received_title') || '';
       const text = formData.get('received_text') || '';
       const url = formData.get('received_url') || '';
@@ -68,7 +68,7 @@ self.addEventListener('fetch', event => {
         }
 
         const fileReader = new FileReader();
-        let textFromFileLoaded =
+        const textFromFileLoaded =
             await readAsTextPromise(fileReader, files[index], 'UTF-8');
         if (index > 0) {
           file_contents += ', ';
