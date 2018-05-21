@@ -4,6 +4,14 @@
 
 let handleClientSide = true;
 
+// Promise-based version of FileReader.readAsText.
+function readAsTextPromise(fileReader, blob, encoding) {
+  return new Promise(resolve => {
+    fileReader.onload = e => resolve(e.target.result);
+    fileReader.readAsText(blob, encoding);
+  });
+}
+
 self.addEventListener('activate', event => {
   event.waitUntil(clients.claim());
 });
@@ -48,7 +56,7 @@ self.addEventListener('fetch', event => {
       prepareField();
 
       return new Promise(resolve => {
-        function progress() {
+        async function progress() {
           while (index === files.length) {
             body = body.replace(
                 '{{' + file_fields[field_index] + '}}', file_contents);
@@ -62,16 +70,14 @@ self.addEventListener('fetch', event => {
           }
 
           const fileReader = new FileReader();
-          fileReader.onload = fileLoadedEvent => {
-            const textFromFileLoaded = fileLoadedEvent.target.result;
-            if (index > 0) {
-              file_contents += ', ';
-            }
-            file_contents += textFromFileLoaded;
-            index += 1;
-            progress();
-          };
-          fileReader.readAsText(files[index], 'UTF-8');
+          let textFromFileLoaded =
+              await readAsTextPromise(fileReader, files[index], 'UTF-8');
+          if (index > 0) {
+            file_contents += ', ';
+          }
+          file_contents += textFromFileLoaded;
+          index += 1;
+          progress();
         }
 
         progress();
