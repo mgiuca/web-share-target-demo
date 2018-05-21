@@ -55,33 +55,30 @@ self.addEventListener('fetch', event => {
 
       prepareField();
 
-      return new Promise(resolve => {
-        async function progress() {
-          while (index === files.length) {
-            body = body.replace(
-                '{{' + file_fields[field_index] + '}}', file_contents);
+      async function progress() {
+        while (index === files.length) {
+          body = body.replace(
+              '{{' + file_fields[field_index] + '}}', file_contents);
 
-            ++field_index;
-            if (field_index === file_fields.length) {
-              resolve(new Response(body, init));
-              return;
-            }
-            prepareField();
+          ++field_index;
+          if (field_index === file_fields.length) {
+            return new Response(body, init);
           }
-
-          const fileReader = new FileReader();
-          let textFromFileLoaded =
-              await readAsTextPromise(fileReader, files[index], 'UTF-8');
-          if (index > 0) {
-            file_contents += ', ';
-          }
-          file_contents += textFromFileLoaded;
-          index += 1;
-          progress();
+          prepareField();
         }
 
-        progress();
-      });
+        const fileReader = new FileReader();
+        let textFromFileLoaded =
+            await readAsTextPromise(fileReader, files[index], 'UTF-8');
+        if (index > 0) {
+          file_contents += ', ';
+        }
+        file_contents += textFromFileLoaded;
+        index += 1;
+        return await progress();
+      }
+
+      return await progress();
     })());
   }
 
